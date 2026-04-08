@@ -14,7 +14,7 @@ const emptyConvenio = {
   procedimentos: [{ ...emptyProcedure }],
 };
 
-export default function SimuladorForm({ leadData, onCalculate }) {
+export default function SimuladorForm({ onCalculate }) {
   const [convenios, setConvenios] = useState([{ ...emptyConvenio, procedimentos: [{ ...emptyProcedure }] }]);
   const [custoFixoMensal, setCustoFixoMensal] = useState('');
   const [horasPorDia, setHorasPorDia] = useState('');
@@ -112,10 +112,11 @@ export default function SimuladorForm({ leadData, onCalculate }) {
           <div className="progress-step active" />
           <div className="progress-step active" />
           <div className="progress-step" />
+          <div className="progress-step" />
         </div>
 
         <div className="diagnostic-header fade-up">
-          <h2>Simulador de {leadData.clinica}</h2>
+          <h2>Simulador de Convênios</h2>
           <p>Preencha os dados reais. Não precisa ser exato — uma estimativa já revela muito.</p>
         </div>
 

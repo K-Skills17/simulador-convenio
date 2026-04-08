@@ -461,10 +461,140 @@ h1, h2, h3, h4 {
 .fade-up-delay-3 { animation-delay: 0.3s; opacity: 0; }
 .fade-up-delay-4 { animation-delay: 0.4s; opacity: 0; }
 
+/* Landing benefits */
+.landing-benefits {
+  max-width: 520px;
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.benefit-item {
+  font-size: 15px;
+  color: var(--text-muted);
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: left;
+}
+.benefit-item::before {
+  content: '\2713 ';
+  color: var(--accent);
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+/* Teaser page */
+.teaser-page { min-height: 100vh; padding: 40px 24px 80px; }
+.teaser-header { text-align: center; margin-bottom: 48px; }
+.teaser-header h2 { font-size: 32px; margin-bottom: 8px; }
+.teaser-header p { color: var(--text-muted); font-size: 15px; }
+
+.teaser-blurred-section {
+  position: relative;
+  margin-bottom: 40px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.teaser-blurred-content {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.5;
+}
+
+.teaser-blurred-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 12px;
+}
+
+.teaser-blurred-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.teaser-blurred-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.teaser-blurred-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.teaser-blur-line {
+  height: 14px;
+  background: var(--border);
+  border-radius: 4px;
+  width: 100%;
+}
+.teaser-blur-line.short { width: 60%; }
+
+.teaser-blurred-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text);
+  z-index: 2;
+}
+.teaser-lock-icon { color: var(--accent); }
+.teaser-blurred-overlay p {
+  font-size: 15px;
+  color: var(--text-muted);
+  text-align: center;
+  max-width: 320px;
+}
+
+.teaser-gate-form {
+  max-width: 440px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+.teaser-gate-form h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+.teaser-gate-subtitle {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 24px;
+}
+
+/* Results actions row */
+.results-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.btn-share {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+.btn-share:hover {
+  background: rgba(196, 162, 101, 0.1) !important;
+}
+
 @media (max-width: 640px) {
   .form-grid { grid-template-columns: 1fr; }
   .landing-features { grid-template-columns: 1fr; gap: 24px; }
   .procedure-table-header, .procedure-table-row { grid-template-columns: 1.5fr 1fr 1fr 1fr; font-size: 12px; }
   .convenio-result-header { flex-direction: column; align-items: flex-start; gap: 8px; }
   .cta-section { padding: 32px 24px; }
+  .results-actions { flex-direction: column; align-items: center; }
 }

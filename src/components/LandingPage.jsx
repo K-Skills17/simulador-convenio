@@ -1,20 +1,4 @@
-import { useState } from 'react';
-
-export default function LandingPage({ onSubmit }) {
-  const [form, setForm] = useState({
-    nome: '',
-    clinica: '',
-    email: '',
-    cidade: '',
-  });
-
-  const isValid = form.nome && form.clinica && form.email;
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isValid) onSubmit(form);
-  };
-
+export default function LandingPage({ onStart }) {
   return (
     <div className="landing">
       <div className="landing-logo">
@@ -30,38 +14,11 @@ export default function LandingPage({ onSubmit }) {
         — ou se você ganharia mais atendendo particular.
       </p>
 
-      <form className="lead-form fade-up fade-up-delay-2" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Seu nome"
-          value={form.nome}
-          onChange={(e) => setForm({ ...form, nome: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Nome da clínica"
-          value={form.clinica}
-          onChange={(e) => setForm({ ...form, clinica: e.target.value })}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Seu melhor e-mail"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Cidade (opcional)"
-          value={form.cidade}
-          onChange={(e) => setForm({ ...form, cidade: e.target.value })}
-        />
-        <button type="submit" className="btn-primary" disabled={!isValid}>
+      <div className="fade-up fade-up-delay-2" style={{ width: '100%', maxWidth: 400, textAlign: 'center' }}>
+        <button type="button" className="btn-primary" onClick={onStart}>
           Simular Meus Convênios
         </button>
-      </form>
+      </div>
 
       <div className="landing-features fade-up fade-up-delay-3">
         <div className="landing-feature">
@@ -76,6 +33,12 @@ export default function LandingPage({ onSubmit }) {
           <div className="number">R$</div>
           <p>Lucro real por convênio</p>
         </div>
+      </div>
+
+      <div className="landing-benefits fade-up fade-up-delay-4">
+        <div className="benefit-item">Saiba exatamente quanto cada convênio custa para sua clínica</div>
+        <div className="benefit-item">Veja o custo real por procedimento (incluindo tempo de cadeira)</div>
+        <div className="benefit-item">Descubra quantos pacientes particulares substituem cada convênio</div>
       </div>
 
       <div className="footer">

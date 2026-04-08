@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';
@@ -21,11 +21,33 @@ function CustomTooltip({ active, payload }) {
 
 export default function ResultsDashboard({ results, leadData }) {
   const dashboardRef = useRef(null);
+  const [copied, setCopied] = useState(false);
+
+  const clinicName = leadData?.clinica || 'Minha Clínica';
+  const cityName = leadData?.cidade || 'Brasil';
 
   const whatsappMessage = encodeURIComponent(
-    `Olá! Fiz o Simulador de Convênios da minha clínica "${leadData.clinica}" e descobri que ${results.saldoLiquido < 0 ? `estou perdendo ${formatCurrency(Math.abs(results.saldoLiquido))} por mês com convênios` : `meus convênios geram ${formatCurrency(results.saldoLiquido)} por mês`}. Gostaria de saber como atrair mais pacientes particulares.`
+    `Olá! Fiz o Simulador de Convênios da minha clínica "${clinicName}" e descobri que ${results.saldoLiquido < 0 ? `estou perdendo ${formatCurrency(Math.abs(results.saldoLiquido))} por mês com convênios` : `meus convênios geram ${formatCurrency(results.saldoLiquido)} por mês`}. Gostaria de saber como atrair mais pacientes particulares.`
   );
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
+
+  const handleCopyLink = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }).catch(() => {
+      // Fallback for older browsers
+      const input = document.createElement('input');
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    });
+  };
 
   const handleExportPDF = async () => {
     if (!dashboardRef.current) return;
@@ -37,7 +59,7 @@ export default function ResultsDashboard({ results, leadData }) {
       const imgWidth = pageWidth - 20;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-      pdf.save(`simulador-convenio-${leadData.clinica.toLowerCase().replace(/\s+/g, '-')}.pdf`);
+      pdf.save(`simulador-convenio-${clinicName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
     } catch {
       alert('Erro ao gerar PDF. Tente novamente.');
     }
@@ -55,11 +77,12 @@ export default function ResultsDashboard({ results, leadData }) {
           <div className="progress-step active" />
           <div className="progress-step active" />
           <div className="progress-step active" />
+          <div className="progress-step active" />
         </div>
 
         <div className="results-header fade-up">
           <h2>Resultado da Simulação</h2>
-          <div className="clinic-name">{leadData.clinica} — {leadData.cidade || 'Brasil'}</div>
+          <div className="clinic-name">{clinicName} — {cityName}</div>
         </div>
 
         <div className={`big-number-card fade-up fade-up-delay-1 ${results.saldoLiquido >= 0 ? 'positive' : ''}`}>
@@ -169,10 +192,14 @@ export default function ResultsDashboard({ results, leadData }) {
             </svg>
             Falar com Especialista
           </a>
-          <br />
-          <button className="btn-secondary" onClick={handleExportPDF}>
-            Baixar Simulação em PDF
-          </button>
+          <div className="results-actions">
+            <button className="btn-secondary" onClick={handleExportPDF}>
+              Baixar Simulação em PDF
+            </button>
+            <button className="btn-secondary btn-share" onClick={handleCopyLink}>
+              {copied ? 'Link Copiado!' : 'Compartilhar Resultado'}
+            </button>
+          </div>
         </div>
 
         <div className="footer">

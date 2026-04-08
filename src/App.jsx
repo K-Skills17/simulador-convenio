@@ -1,18 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LandingPage from './components/LandingPage';
 import SimuladorForm from './components/SimuladorForm';
+import TeaserGate from './components/TeaserGate';
 import ResultsDashboard from './components/ResultsDashboard';
 import { calculateConvenio } from './utils/calculations';
-import { sendToSheet } from './utils/sheets';
 import './App.css';
+
+function encodeResults(data) {
+  try {
+    return window.btoa(encodeURIComponent(JSON.stringify(data)));
+  } catch {
+    return null;
+  }
+}
+
+function decodeResults(hash) {
+  try {
+    return JSON.parse(decodeURIComponent(window.atob(hash)));
+  } catch {
+    return null;
+  }
+}
 
 function App() {
   const [step, setStep] = useState('landing');
   const [leadData, setLeadData] = useState(null);
   const [results, setResults] = useState(null);
+  const [formInputs, setFormInputs] = useState(null);
 
-  const handleLeadSubmit = (data) => {
-    setLeadData(data);
+  // On mount, check URL hash for encoded results
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.startsWith('#results=')) {
+      const encoded = hash.slice('#results='.length);
+      const decoded = decodeResults(encoded);
+      if (decoded) {
+        setResults(decoded);
+        setStep('results');
+      }
+    }
+  }, []);
+
+  const handleStartSimulator = () => {
     setStep('form');
     window.scrollTo(0, 0);
   };
@@ -20,26 +49,36 @@ function App() {
   const handleCalculate = (inputs) => {
     const calcResults = calculateConvenio(inputs);
     setResults(calcResults);
+    setFormInputs(inputs);
+    setStep('teaser');
+    window.scrollTo(0, 0);
+  };
+
+  const handleLeadSubmit = (data) => {
+    setLeadData(data);
+
+    // Encode results in URL hash
+    const encoded = encodeResults(results);
+    if (encoded) {
+      window.location.hash = `results=${encoded}`;
+    }
+
     setStep('results');
     window.scrollTo(0, 0);
-
-    sendToSheet({
-      ...leadData,
-      totalConvenios: inputs.convenios.length,
-      custoFixoMensal: inputs.custoFixoMensal,
-      horasPorDia: inputs.horasPorDia,
-      diasPorMes: inputs.diasPorMes,
-      ticketMedioParticular: inputs.ticketMedioParticular,
-      perdaTotalMensal: calcResults.perdaTotalMensal,
-      perdaTotalAnual: calcResults.perdaTotalAnual,
-    });
   };
 
   return (
     <>
-      {step === 'landing' && <LandingPage onSubmit={handleLeadSubmit} />}
+      {step === 'landing' && <LandingPage onStart={handleStartSimulator} />}
       {step === 'form' && (
-        <SimuladorForm leadData={leadData} onCalculate={handleCalculate} />
+        <SimuladorForm onCalculate={handleCalculate} />
+      )}
+      {step === 'teaser' && (
+        <TeaserGate
+          results={results}
+          formInputs={formInputs}
+          onLeadSubmit={handleLeadSubmit}
+        />
       )}
       {step === 'results' && (
         <ResultsDashboard results={results} leadData={leadData} />
