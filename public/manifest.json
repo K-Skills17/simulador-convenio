@@ -1,0 +1,11 @@
+{
+  "name": "Simulador Convênio vs. Particular",
+  "short_name": "Simulador Convênio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAFAF8",
+  "theme_color": "#C4A265",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
