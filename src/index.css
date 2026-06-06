@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #FAFAF8;
+  color: #1A1A1A;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.5s ease-out forwards;
+}
+
+.fade-up-delay-1 {
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+.fade-up-delay-2 {
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+.fade-up-delay-3 {
+  animation-delay: 0.3s;
+  opacity: 0;
+}
